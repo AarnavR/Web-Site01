@@ -1,12 +1,32 @@
-const yourName = document.getElementById("yourName");
-const ourMessage = document.getElementById("ourMessage");
+async function start() {
+    const response = await fetch("https://dog.ceo/api/breeds/list/all")
+    const data = await response.json()
+    createBreadList(data.message)
+}
 
-yourName.addEventListener("input",amazingFunction) 
+start()
 
-function amazingFunction() {
-    if(yourName.value) {
-        ourMessage.innerText = yourName.value + " is cool";
-    } else {
-        ourMessage.innerText = "Please enter a name";
+function createBreadList(breedList) {
+    document.getElementById("breed").innerHTML = `
+        <select onchange="loadByBreed(this.value)">
+            <option>Choose a dog bread</option>
+            ${Object.keys(breedList).map(function (breed) {
+                return `<option>${breed}</option>`
+            })}.join('')}
+        </select>
+    `
+}
+
+async function loadByBreed(breed) {
+    if(breed != "Choose a dog breed") {
+        const response = await fetch(`https://dog.ceo/api/breed/${breed}/images`)
+        const data = await response.json()
+        createSlideShow(data.message)
     }
- }
+}
+
+function createSlideShow(images) {
+    document.getElementById("slideshow").innerHTML = `
+            <div class="slide" style="background-image: url('${images[0]}')"></div>   
+        `
+}
