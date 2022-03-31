@@ -26,7 +26,24 @@ async function loadByBreed(breed) {
 }
 
 function createSlideShow(images) {
+    let currentPosition = 0
     document.getElementById("slideshow").innerHTML = `
-            <div class="slide" style="background-image: url('${images[0]}')"></div>   
+            <div class="slide" style="background-image: url('${images[0]}')"></div> 
+            <div class="slide" style="background-image: url('${images[1]}')"></div>   
         `
+        currentPosition += 2
+
+        setInterval(nextSlide, 3000)
+
+        function nextSlide() {
+            document.getElementById("slideshow").insertAdjacentHTML("beforeend", `<div class="slide" style="background-image: url('${images[currentPosition]}')"></div>`)
+            setTimeout(function() {
+                document.querySelector(".slide").remove()
+            }, 1000)
+            if(currentPosition + 1 >= images.lenght) {
+                currentPosition = 0
+            } else {
+                currentPosition++
+            }
+        }
 }
